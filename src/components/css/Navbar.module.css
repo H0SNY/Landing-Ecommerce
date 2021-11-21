@@ -1,0 +1,80 @@
+@import url('../../MainCss/MainVariables.css');
+
+p {
+	font-family: var(--RALEWAY);
+}
+
+.link {
+	margin-left: 20px;
+	font-size: var(--NORMAL-FONT);
+	font-weight: 600;
+	color: var(--BLACK);
+	text-decoration: none;
+}
+
+.link:hover {
+	cursor: pointer;
+	border-bottom: solid 2px var(--GREEN);
+	color: var(--GREEN) !important;
+}
+
+.icon {
+	margin-top: 15px;
+}
+
+.control {
+	margin: 20px 50px 10px 0;
+}
+
+.menuroot {
+	position: absolute;
+}
+.downbutton {
+	background-color: var(--WHITE);
+	border: none;
+}
+.downbutton:hover{
+	cursor: pointer;
+}
+.svg {
+	width: 20px;
+	height: 20px;
+}
+.svgdown {
+	width: 10px;
+	height: 10px;
+}
+.dollarroot {
+	position: relative;
+	right: 30px;
+	font-weight: bold;
+}
+
+.cartroot {
+	position: relative;
+	left: 30px;
+	cursor: pointer;
+}
+
+.menu {
+	font-size: var(--NORMAL-FONT);
+	font-weight: var(--HIGH-WEIGHT);
+	background-color: rgba(220, 220, 220);
+	margin-top: 10px;
+}
+.currency {
+	width: 100%;
+}
+.currency:hover {
+	background-color: var(--GREY);
+	cursor: pointer;
+}
+.currency p {
+	padding: 5px 20px 5px 20px;
+	margin: 0;
+}
+
+.badge {
+	position: absolute;
+}
+

@@ -1,0 +1,35 @@
+@import url('../../MainCss/MainVariables.css');
+
+.categorymenu{
+	width: 30%;
+	margin: 23px 20px 20px 20px;
+	font-family: var(--RALEWAY);
+	font-weight: 700;
+	background-color: var(--WHITE);
+	border: 1px solid var(--GREY);
+	padding: 10px;
+	border-radius: 5px;
+
+}
+.categorylabel{
+	margin: 20px;
+	font-weight: var(--HIGH-WEIGHT);
+}
+.category{
+	font-weight: var(--HIGH-WEIGHT);
+	font-size: var(--LARGE-FONT);
+	text-transform: uppercase;
+}
+.option{
+	font-family: var(--RALEWAY);
+	font-weight: 700;
+}
+
+.products{
+	margin : 40px;
+	padding: 0 50px 0 50px;
+}
+
+.row{
+	margin : 20px
+}

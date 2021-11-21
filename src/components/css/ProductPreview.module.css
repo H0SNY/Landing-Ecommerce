@@ -1,0 +1,58 @@
+@import url('../../MainCss/MainVariables.css');
+
+.root {
+	width: 300px;
+	height: fit-content;
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
+	margin: 0 50px 0 50px;
+
+}
+.root:hover {
+	box-shadow: 3px 10px rgb(158, 155, 155);
+}
+.imgroot {
+	text-align: center;
+	position: relative;
+}
+.img {
+	width: 200px;
+	height: 230px;
+}
+.nameroot {
+	font-weight: 600;
+	color: rgba(20, 20, 20, 0.9);
+	padding: 0 20px 0 20px;
+}
+
+.priceroot {
+	font-weight: var(--HIGH-WEIGHT);
+	position: relative;
+	bottom: 20px;
+	padding: 0 20px 0 20px;
+}
+
+.outofstock {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-weight: 500;
+	color: var(--GREY);
+}
+.light {
+	font-weight: var(--HIGH-WEIGHT) !important;
+	color: rgba(180, 180, 180) !important;
+}
+
+@media (max-width: 800px) {
+	.root {
+		width: 100px;
+	}
+
+	.img {
+		width: 100px;
+		height: 130px;
+	}
+}
