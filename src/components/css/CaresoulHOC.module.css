@@ -1,0 +1,30 @@
+@import url("../../MainCss/MainVariables.css");
+
+.root{
+	position: relative;
+}
+
+.backbuttonroot{
+	position: absolute;
+	top: 40%;
+}
+.forwardbuttonroot{
+	position: absolute;
+	top: 40%;
+	left: 80%;
+}
+.button{
+	background-color: transparent;
+	border: none;
+}
+
+.icon{
+	color: white;
+	width: inherit;
+	height: inherit;
+	cursor: pointer;
+}
+
+.icon:hover{
+	color: var(--GREEN);
+}

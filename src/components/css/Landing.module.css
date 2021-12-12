@@ -19,6 +19,7 @@
 	font-weight: var(--HIGH-WEIGHT);
 	font-size: var(--LARGE-FONT);
 	text-transform: uppercase;
+	margin-left: 13%;
 }
 .option{
 	font-family: var(--RALEWAY);

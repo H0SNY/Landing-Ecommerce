@@ -1,13 +1,11 @@
 @import url('../../MainCss/MainVariables.css');
 .root {
-	position: absolute;
-	top: 15%;
-	transform: translate(100%, 0%);
+	position: relative;
+	top: 0;
+	left: 70%;
 	width: 300px;
-	background-color: white;
-	border-radius: 5px;
-	box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
-	z-index: 10;
+	z-index: 30;
+	background-color: rgb(280, 280, 280);
 }
 
 .headerroot {
@@ -15,6 +13,7 @@
 }
 .productroot {
 	padding: 20px;
+	
 }
 .img {
 	width: 70px;
@@ -41,16 +40,25 @@
 	bottom: 15px;
 }
 .attritem {
-	width: 20px;
-	height: 20px;
+	position: relative;
+	width: 24px;
+	height: 24px;
 	color: var(--BLACK);
-	font-weight: var(--HIGH-WEIGHT);
+	font-weight: bold;
 	border: solid black 1px;
-	font-size: 10px;
+	font-size: 7px;
 	margin-right: 10px;
+	cursor: pointer;
+}
+.attrsroot{
+
 }
 .attrroot {
-	margin-bottom: 10px;
+	margin: 5px;
+}
+.attrname {
+	font-weight: bold;
+	font-size: 12px;
 }
 
 .selected {
@@ -92,8 +100,7 @@
 	font-weight: bold;
 }
 
-
-.maincontrol{
+.maincontrol {
 	margin-bottom: 20px;
 }
 .viewbag {
@@ -116,11 +123,14 @@
 	cursor: pointer;
 	color: var(--WHITE);
 }
+.brand{
+	font-size: 12px;
+	font-weight: bold;
+}
 
 @media (max-width: 1000px) {
 	.root {
-		top: 70%;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%, 0%);
 	}
 }

@@ -1,10 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { getFirstNameAndLastName } from '../../__helpers__/product';
+import { createSelected, getFirstNameAndLastName } from '../../__helpers__/product';
 import getCurrencySymbol from '../../assets/currencies';
 import { LOAD_PRODUCT } from '../../graphql/queries';
 import mainClasses from '../../MainCss/MainClasses.module.css';
 import classes from '../css/Product.module.css';
+import DomPurify from "dompurify"
 class Product extends React.Component {
 	constructor(props) {
 		super(props);
@@ -16,6 +17,7 @@ class Product extends React.Component {
 			mainImage: '',
 			selectedProduct: [],
 		};
+		this.myDesc = React.createRef()
 		this.renderImage = this.renderImage.bind(this);
 		this.renderAttribute = this.renderAttribute.bind(this);
 		this.renderAttributeItem = this.renderAttributeItem.bind(this);
@@ -33,14 +35,7 @@ class Product extends React.Component {
 			},
 		});
 		const { product } = data;
-		const selected = [];
-
-		for (let i = 0; i < product.attributes.length; i++) {
-			selected.push({
-				name: product.attributes[i]?.name,
-				value: product.attributes[i]?.items[0]?.id,
-			});
-		}
+		const selected = createSelected(product.attributes);
 		this.setState((prevState) => ({ ...prevState, loading: false, product: product, mainImage: product?.gallery[0], selectedProduct: selected }));
 	}
 
@@ -50,29 +45,29 @@ class Product extends React.Component {
 
 	selectAttr(item, attrName) {
 		return () => {
-			const arr = this.state.selectedProduct;
-			for (let i = 0 ; i < arr.length;  i++) {
-				if (arr[i]?.name === attrName) {
-					arr[i].value = item.id;
-					this.setState((prevState) => ({ ...prevState, selectedProduct: arr }));
-					return;
+			const selectedProduct = this.state.selectedProduct;
+			for (let i = 0; i < selectedProduct.length; i++) {
+				if (selectedProduct[i].name === attrName) {
+					selectedProduct[i].value = item.id;
+					break;
 				}
 			}
+			this.setState((prevState) => ({ ...prevState, selectedProduct: selectedProduct }));
 		};
 	}
 
-	addToCart(){
+	addToCart() {
 		const product = {
-			...this.state.product , 
-			selectedProduct : this.state.selectedProduct , 
-			qty : 1
-		}
+			...this.state.product,
+			selectedProduct: this.state.selectedProduct,
+			qty: 1,
+		};
 		this.props.addProduct(product)();
 	}
 
-	getPrice(){
-		const price = this.state.product?.prices?.find(price => price.currency === this.props.currency);
-		return `${getCurrencySymbol(price.currency)} ${price.amount}`
+	getPrice() {
+		const price = this.state.product?.prices?.find((price) => price.currency === this.props.currency);
+		return `${getCurrencySymbol(price.currency)} ${price.amount}`;
 	}
 
 	renderImage(src) {
@@ -93,7 +88,7 @@ class Product extends React.Component {
 						</div>
 					);
 				case 'swatch':
-					return <div onClick={this.selectAttr(item, attrName)} key={item.value} className={`${mainClasses.container} ${mainClasses.center} ${classes.attritem} ${this.state.selectedProduct.find(x => x.name === attrName && x.value === item.id) && classes.selectedcolor}`} style={{ backgroundColor: item.value }} />;
+					return <div onClick={this.selectAttr(item, attrName)} key={item.value} className={`${mainClasses.container} ${mainClasses.center} ${classes.attritem} ${this.state.selectedProduct.find((x) => x.name === attrName && x.value === item.id) && classes.selectedcolor}`} style={{ backgroundColor: item.value }} />;
 				default:
 					return;
 			}
@@ -104,15 +99,19 @@ class Product extends React.Component {
 		const { name, type, items } = attr;
 		return (
 			<div key={attr.name} className={`${mainClasses.container} ${mainClasses.column} ${classes.attrroot}`}>
-				<p className={classes.attrname}>{name}</p>
-				<div className={`${mainClasses.container} ${mainClasses.row} ${classes.attritemsroot}`}>{items.map(this.renderAttributeItem(type, name))}</div>
+				<div className={`${mainClasses.container} ${mainClasses.column} ${mainClasses.end} ${mainClasses.row_3} ${classes.attrname}`}>
+					<p className={classes.attrname}>{name}</p>
+				</div>
+
+				<div className={`${mainClasses.container} ${mainClasses.row} ${mainClasses.start} ${mainClasses.row_8} ${classes.attritemsroot}`}>{items.map(this.renderAttributeItem(type, name))}</div>
 			</div>
 		);
 	}
 
 	render() {
-		const { name, inStock, gallery, description, category, attributes, prices, brand } = this.state.product;
-		const [firstName , restOfName] = getFirstNameAndLastName(name);
+		const { name, inStock, description, attributes } = this.state.product;
+		const safeDesc = DomPurify.sanitize(description);
+		const [firstName, restOfName] = getFirstNameAndLastName(name);
 		return (
 			<>
 				{this.state.loading ? (
@@ -124,24 +123,34 @@ class Product extends React.Component {
 							<img className={classes.mainimg} alt="main img" src={this.state.mainImage} />
 						</div>
 						<div className={`${mainClasses.container} ${mainClasses.column} ${classes.info}`}>
-							<div className={`${mainClasses.container} ${mainClasses.column}`}>
-								<p className={classes.firstname}>{firstName}</p>
-								{restOfName && <p className={classes.restofname}>{restOfName}</p>}
+							<div className={`${mainClasses.container} ${mainClasses.column} ${classes.descroot}`}>
+								<div className={`${mainClasses.container} ${mainClasses.column}`}>
+									<p className={classes.firstname}>{firstName}</p>
+								</div>
+								{restOfName && restOfName?.length && (
+									<div className={`${mainClasses.container} ${mainClasses.column}`}>
+										<p className={classes.restofname}>{restOfName}</p>
+									</div>
+								)}
 							</div>
-							<div className={`${mainClasses.container} ${mainClasses.column} ${classes.attributesroot}`}>{attributes.map(this.renderAttribute)}</div>
-							<div className = {`${mainClasses.container} ${mainClasses.column} ${classes.priceroot}`}>
+							<div className={`${mainClasses.container} ${mainClasses.column} ${classes.attrsroot}`}>{attributes.map(this.renderAttribute)}</div>
+							<div className={`${mainClasses.container} ${mainClasses.column} ${classes.priceroot}`}>
 								<p>{this.getPrice()}</p>
 							</div>
 
-							{inStock ? "" : <div>
-								<p>This Item Is Not Available At The Moment</p>
-							</div>}
-							<div className = {`${mainClasses.container} ${classes.cartbuttonroot}`}>
-								<button style = {{cursor : inStock ? 'pointer' : 'default'}} disabled = {!inStock} onClick = {this.addToCart} className = {classes.cartbutton}><p>ADD TO CART</p></button>
+							{inStock ? (
+								''
+							) : (
+								<div>
+									<p>This Item Is Not Available At The Moment</p>
+								</div>
+							)}
+							<div className={`${mainClasses.container} ${classes.cartbuttonroot}`}>
+								<button style={{ cursor: inStock ? 'pointer' : 'default' }} disabled={!inStock} onClick={this.addToCart} className={classes.cartbutton}>
+									<p>ADD TO CART</p>
+								</button>
 							</div>
-							 <div className = {classes.desc} dangerouslySetInnerHTML={{ __html: description }} />
-									
-							
+							<div className={classes.desc} dangerouslySetInnerHTML={{ __html: safeDesc }} />
 						</div>
 					</div>
 				)}

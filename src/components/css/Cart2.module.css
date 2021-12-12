@@ -1,0 +1,158 @@
+@import url('../../MainCss/MainVariables.css');
+.root {
+}
+
+.headerroot {
+	display: none;
+}
+.header {
+	padding-left: 50px;
+	font-size: 20px;
+	font-weight: 8900;
+}
+.productroot {
+	padding: 30px;
+	border-top: solid rgba(180, 180, 180) 1px;
+	margin: 0 20px 0 20px;
+	font-size: 20px;
+}
+.img {
+	width: 150px;
+	height: 150px;
+}
+.productdesc {
+	position: relative;
+	bottom: 20px;
+}
+.firstname {
+	font-weight: 700;
+}
+.restofname {
+	position: relative;
+	bottom: 10px;
+	font-weight: bold;
+}
+.mybag {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+.priceroot {
+	font-weight: 600;
+	height: 10px;
+	position: relative;
+	bottom: 15px;
+}
+.attritem {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	color: var(--BLACK);
+	font-weight: bold;
+	border: solid black 1px;
+	font-size: 12px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+.attrsroot {
+	justify-content: start;
+	margin-top: 20px;
+}
+.attrroot {
+	margin: 5px;
+	height: 70px;
+}
+.attrname {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.selected {
+	background-color: black;
+	color: aliceblue;
+}
+
+.colorselected {
+	border: solid black 3px;
+}
+.controlroot {
+	height: 150px;
+	justify-content: space-between;
+}
+
+.controlbutton {
+	width: 25px;
+	height: 25px;
+	color: black;
+	background-color: var(--WHITE);
+	border: solid 1px var(--BLACK);
+	margin-right: 10px;
+	font-size: large;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.controlbutton:hover {
+	background-color: rgba(200, 200, 200, 0.8);
+}
+
+.qtyitem {
+	text-align: center;
+	font-size: large;
+	font-weight: bold;
+}
+
+.total {
+	font-weight: bold;
+}
+
+.totalprice {
+	font-weight: bold;
+}
+
+.maincontrol {
+}
+.viewbag {
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border: 1px var(--BLACK) solid;
+	font-weight: bold;
+	background-color: var(--WHITE);
+	padding: 10px;
+	cursor: pointer;
+}
+.checkout {
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border: none;
+	background-color: var(--GREEN);
+	padding: 10px;
+	cursor: pointer;
+	color: var(--WHITE);
+}
+.brand {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+@media (max-width: 800px) {
+	.attrsroot {
+		justify-content: center;
+		margin-top: 20px;
+	}
+	.attrroot {
+		margin: 5px;
+		height: 50px;
+	}
+	.attrname {
+		font-weight: bold;
+		font-size: 8px;
+	}
+	.attritem{
+		height: 24px;
+		width: 24px;
+		font-size: 8px;
+	}
+}

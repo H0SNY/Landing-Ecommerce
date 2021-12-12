@@ -2,36 +2,35 @@ import React from 'react';
 import classes from '../css/Navbar.module.css';
 import mainClasses from '../../MainCss/MainClasses.module.css';
 import Cart from '../../assets/shopping-cart.png';
-import CartPreview from './CartPreview';
 import ArrowDown from '../../assets/down-arrow.png';
-import { LOAD_CURRENCIES } from '../../graphql/queries';
+import ArrowUp from '../../assets/up-arrow.png';
 import getCurrencySymbol from '../../assets/currencies';
 
 export default class Navbar extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			loading: true,
-			currencies: [],
-			currenciesCollapsed: false,
-			cartCollapsed : false
-		};
+		
 		this.handleCurrencies = this.handleCurrencies.bind(this);
 		this.handleChangeCurrency = this.handleChangeCurrency.bind(this);
 		this.renderCurrency = this.renderCurrency.bind(this);
 		this.handleCart = this.handleCart.bind(this);
 		this.handleCartControl = this.handleCartControl.bind(this);
+		this.handleCategory = this.handleCategory.bind(this);
+		this.renderCategory = this.renderCategory.bind(this);
 	}
 
-	async componentDidMount() {
-		const { client } = this.props;
-		const { data } = await client.query({ query: LOAD_CURRENCIES });
-		const { currencies } = data;
-		this.setState((prevState) => ({ ...prevState, currencies: currencies, loading: false }));
+	
+	handleCategory(name){
+		return() =>{
+			this.props.changeCategory(name)
+		}
+		
 	}
+	
 
 	handleCurrencies() {
-		this.setState((prevState) => ({ ...prevState, currenciesCollapsed: !prevState?.currenciesCollapsed }));
+		this.props.switchCurrencies();
+		if(this.props.cartCollapsed) this.props.switchCart();
 	}
 
 	handleChangeCurrency(curr) {
@@ -40,12 +39,21 @@ export default class Navbar extends React.Component {
 		};
 	}
 
-	handleCart(){
-		this.setState(prevState => ({...prevState , cartCollapsed : !prevState.cartCollapsed}))
+	handleCart() {
+		this.props.switchCart();
+		if(this.props.currenciesCollapsed) this.props.switchCurrencies();
 	}
 
-	handleCartControl(type , id){
-		this.props.cartControl(type , id)();
+	handleCartControl(type, id) {
+		this.props.cartControl(type, id)();
+	}
+
+	renderCategory(category) {
+		return (
+			<button key = {category.name} onClick = {this.handleCategory(category.name)} className={classes.link}>
+				<p>{category.name}</p>
+			</button>
+		);
 	}
 
 	renderCurrency(currency) {
@@ -60,22 +68,14 @@ export default class Navbar extends React.Component {
 
 	render() {
 		return (
-			<div className={`${classes.root} ${mainClasses.container} ${mainClasses.row} ${mainClasses.space_evenly}`}>
-				{this.state.cartCollapsed ?  <CartPreview cartControl = {this.handleCartControl}  cart={this.props.cart} currency={this.props.currency}/> : ""}
-				<div className={`${mainClasses.container} ${mainClasses.row} ${mainClasses.col - 4} ${mainClasses.center}`}>
-					<a href="/" className={classes.link}>
-						<p>WOMEN</p>
-					</a>
-					<a href="/" className={classes.link}>
-						<p>MEN</p>
-					</a>
-					<a href="/" className={classes.link}>
-						<p>KIDS</p>
-					</a>
+			<div className={`${classes.root} ${mainClasses.container} ${mainClasses.row} ${mainClasses.space_between}`}>
+				
+				<div className={`${mainClasses.container} ${mainClasses.row} ${mainClasses.col_4} ${mainClasses.center}`}>
+					{this.props.loading ? 'loading....' : this.props.categories.map(this.renderCategory)}
 				</div>
 				<div />
 
-				<div className={`${mainClasses.container} ${mainClasses.row} ${classes.icon} ${mainClasses.col}`}>
+				<a href = '/' className={`${mainClasses.container} ${mainClasses.row} ${mainClasses.center} ${classes.icon} ${mainClasses.col_4}`}>
 					<svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clipPath="url(#clip0_150_359)">
 							<path d="M34.0222 28.6646C34.0494 28.983 33.8009 29.2566 33.4846 29.2566H7.46924C7.15373 29.2566 6.90553 28.9843 6.93156 28.6665L8.7959 5.91227C8.8191 5.62962 9.05287 5.41211 9.33372 5.41211H31.5426C31.8226 5.41211 32.0561 5.62853 32.0801 5.91036L34.0222 28.6646Z" fill="#1DCF65" />
@@ -93,25 +93,24 @@ export default class Navbar extends React.Component {
 							</clipPath>
 						</defs>
 					</svg>
-				</div>
+				</a>
 				<div />
 
-				<div className={`${mainClasses.container} ${mainClasses.row} ${classes.control}  ${mainClasses.col - 4}`}>
-					<div className={classes.dollarroot}>
-						{getCurrencySymbol(this.props.currency)}
-					</div>
+				<div className={`${mainClasses.container} ${mainClasses.row} ${mainClasses.center} ${classes.control} ${mainClasses.col_4}`}>
+					<div onClick = {this.handleCurrencies} className={classes.dollarroot}>{getCurrencySymbol(this.props.currency)}</div>
 					<div className={`${classes.menuroot}`}>
-						<button className = {classes.downbutton} onClick={this.handleCurrencies} type="button" aria-expanded="false" aria-controls="currencycollapse">
-							<img src={ArrowDown} className={classes.svgdown} alt="icon" />
+						<button className={classes.downbutton} onClick={this.handleCurrencies} type="button" aria-expanded="false" aria-controls="currencycollapse">
+							{this.props.currenciesCollapsed ? <img src={ArrowUp} className={classes.svgdown} alt="icon" /> :  <img src={ArrowDown} className={classes.svgdown} alt="icon" />
+							}
 						</button>
 						<div className={`${mainClasses.container} ${mainClasses.column} ${mainClasses.center} ${classes.menu}`}>
-							{this.state.currenciesCollapsed ? this.state.currencies.map(this.renderCurrency) : ''}
-							{this.state.loading ? 'loading...' : ''}
+							<div className = {classes.backdrop}>{this.props.currenciesCollapsed ? this.props.currencies.map(this.renderCurrency) : ''}</div>
+							{this.props.loading ? 'loading...' : ''}
 						</div>
 					</div>
-					<div className={classes.cartroot} onClick = {this.handleCart}>
-						<div className = {classes.badge}>
-							<p>{this.props.cart.products.length}</p>
+					<div className={classes.cartroot} onClick={this.handleCart}>
+						<div className={`${classes.badge} ${mainClasses.container} ${mainClasses.column} ${mainClasses.center}`}>
+							<p className = {classes.badgetext}>{(this.props.cart.products.length)}</p>
 						</div>
 						<img src={Cart} className={classes.svg} alt="icon" />
 					</div>
